@@ -1,13 +1,16 @@
+import argparse
+import shutil
+import calendar
 from pathlib import Path
 from categories import file_cats
-import shutil
 from datetime import datetime
-import calendar
 from collections import defaultdict
-import argparse
 
 
-def backup_dir(source_dir: str, backup_dir: str, create_backup_dir: bool = False):
+def backup_dir(
+    source_dir: str, backup_dir: str, create_backup_dir: bool = False
+) -> None:
+    """Back up the entire source directory to the backup directory, with an option to create a backup directory."""
     home_path = Path.home()
     source_path = home_path.joinpath(source_dir)
     backup_path = home_path.joinpath(backup_dir)
@@ -17,7 +20,7 @@ def backup_dir(source_dir: str, backup_dir: str, create_backup_dir: bool = False
                 shutil.copytree(source_path, backup_path)
             else:
                 print(
-                    "Source path is not a directory or a backup directory already exists"
+                    "Source path is not a directory or backup directory already exists"
                 )
         else:
             if source_path.is_dir() and backup_path.is_dir():
@@ -34,13 +37,15 @@ def backup_dir(source_dir: str, backup_dir: str, create_backup_dir: bool = False
         print(f"Error backing up directory: {e}")
 
 
-def check_empty(source_path: str):
+def check_empty(source_path: Path) -> bool:
+    """Check if the directory is empty or only contains system files like .DS_Store."""
     return all(item.name == ".DS_Store" for item in source_path.iterdir()) or not any(
         source_path.iterdir()
     )
 
 
-def delete_empty_dirs(source_path: str):
+def delete_empty_dirs(source_path: Path) -> None:
+    """Delete all empty subdirectories within the specified path."""
     directories = [d for d in source_path.rglob("*") if d.is_dir()]
     directories.sort(key=lambda x: len(x.parts), reverse=True)
     for item in directories:
@@ -48,13 +53,14 @@ def delete_empty_dirs(source_path: str):
             shutil.rmtree(item)
 
 
-def get_source_path(home_path: str, source_dir: str):
-    return home_path.joinpath(source_dir)
+def get_source_path(home_path: str, source_dir: str) -> Path:
+    """Construct the full path to the source directory under the user's home directory."""
+    return Path(home_path).joinpath(source_dir)
 
 
-def clean_dir_by_suffix(source_dir: str, shallow: bool = False):
+def clean_dir_by_suffix(source_dir: str, shallow: bool = False) -> dict:
+    """Organize files by their suffix into respective directories."""
     source_path = get_source_path(Path.home(), source_dir)
-    print(source_path)
     files_by_suffix_dict = defaultdict(list)
     if shallow:
         files = source_path.glob("*")
@@ -69,7 +75,10 @@ def clean_dir_by_suffix(source_dir: str, shallow: bool = False):
     return files_by_suffix_dict
 
 
-def clean_dir_by_date(source_dir: str, year_only: bool = False, shallow: bool = False):
+def clean_dir_by_date(
+    source_dir: str, year_only: bool = False, shallow: bool = False
+) -> dict:
+    """Organize files by their creation date into yearly or monthly directories."""
     source_path = get_source_path(Path.home(), source_dir)
     files_by_date_dict = defaultdict(list)
     if shallow:
@@ -87,11 +96,11 @@ def clean_dir_by_date(source_dir: str, year_only: bool = False, shallow: bool = 
                     f"{calendar.month_name[creation_date.month]}_{creation_date.year}"
                 )
                 files_by_date_dict[year_month].append(item)
-
     return files_by_date_dict
 
 
-def clean_dir_by_size(source_dir: str, shallow: bool = False):
+def clean_dir_by_size(source_dir: str, shallow: bool = False) -> dict:
+    """Categorize files by size into small, medium, or large."""
     source_path = get_source_path(Path.home(), source_dir)
     files_by_size_dict = defaultdict(list)
     if shallow:
@@ -110,7 +119,8 @@ def clean_dir_by_size(source_dir: str, shallow: bool = False):
     return files_by_size_dict
 
 
-def move_files_to_dir(source_dir: str, files_dict: dict[list]):
+def move_files_to_dir(source_dir: str, files_dict: dict[list]) -> None:
+    """Move files into directories based on a classification, and remove empty directories afterwards."""
     source_path = get_source_path(Path.home(), source_dir)
     for date, items in files_dict.items():
         for item in items:
@@ -121,7 +131,8 @@ def move_files_to_dir(source_dir: str, files_dict: dict[list]):
     delete_empty_dirs(source_path)
 
 
-def delete_files_n_days_old(source_dir, n_days=10):
+def delete_files_n_days_old(source_dir: str, n_days: int = 10) -> None:
+    """Delete files that are older than the specified number of days."""
     source_path = get_source_path(Path.home(), source_dir)
     files = source_path.rglob("*")
     for item in files:
