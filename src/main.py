@@ -62,16 +62,18 @@ def clean_dir_by_suffix(source_dir: str, shallow: bool = False) -> dict:
     """Organize files by their suffix into respective directories."""
     source_path = get_source_path(Path.home(), source_dir)
     files_by_suffix_dict = defaultdict(list)
-    if shallow:
-        files = source_path.glob("*")
-    else:
-        files = source_path.rglob("*")
+    if not source_path.is_dir():
+        print("Directory does not exist")
+        return files_by_suffix_dict
+
+    files = source_path.glob("*") if shallow else source_path.rglob("*")
     for item in files:
         if item.is_file():
             file_suffix = item.suffix[1:].lower()
             for folder, suffixes in file_cats.items():
                 if file_suffix in suffixes:
                     files_by_suffix_dict[folder].append(item)
+
     return files_by_suffix_dict
 
 
@@ -81,10 +83,11 @@ def clean_dir_by_date(
     """Organize files by their creation date into yearly or monthly directories."""
     source_path = get_source_path(Path.home(), source_dir)
     files_by_date_dict = defaultdict(list)
-    if shallow:
-        files = source_path.glob("*")
-    else:
-        files = source_path.rglob("*")
+    if not source_path.is_dir():
+        print("Directory does not exist")
+        return files_by_date_dict
+
+    files = source_path.glob("*") if shallow else source_path.rglob("*")
     for item in files:
         if item.is_file():
             creation_date = datetime.fromtimestamp(item.stat().st_birthtime)
@@ -103,10 +106,12 @@ def clean_dir_by_size(source_dir: str, shallow: bool = False) -> dict:
     """Categorize files by size into small, medium, or large."""
     source_path = get_source_path(Path.home(), source_dir)
     files_by_size_dict = defaultdict(list)
-    if shallow:
-        files = source_path.glob("*")
-    else:
-        files = source_path.rglob("*")
+
+    if not source_path.is_dir():
+        print("Directory does not exist")
+        return files_by_size_dict
+
+    files = source_path.glob("*") if shallow else source_path.rglob("*")
     for item in files:
         if item.is_file():
             mb = round((item.stat().st_size) / 1000000, 2)
