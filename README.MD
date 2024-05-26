@@ -4,7 +4,8 @@ Folder cleanser is a simple Python script that helps you clean directories effic
 
 ## Installation
 
-Clone the repository
+Clone the repository:
+```git clone https://github.com/justinpakzad/FolderCleanser
 
 ```bash
 pip install foobar
@@ -13,16 +14,6 @@ pip install foobar
 ## Usage
 
 ```python
-import foobar
-
-# returns 'words'
-foobar.pluralize('word')
-
-# returns 'geese'
-foobar.pluralize('goose')
-
-# returns 'phenomenon'
-foobar.singularize('phenomena')
 ```
 
 ## Contributing
