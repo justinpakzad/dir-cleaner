@@ -54,6 +54,7 @@ def get_source_path(home_path: str, source_dir: str):
 
 def clean_dir_by_suffix(source_dir: str, shallow: bool = False):
     source_path = get_source_path(Path.home(), source_dir)
+    print(source_path)
     files_by_suffix_dict = defaultdict(list)
     if shallow:
         files = source_path.glob("*")
@@ -133,26 +134,31 @@ def delete_files_n_days_old(source_dir, n_days=10):
 
 
 def main():
+    parent_parser = argparse.ArgumentParser(add_help=False)
+    parent_parser.add_argument(
+        "--backup", action="store_true", help="Create a backup before making changes"
+    )
+    parent_parser.add_argument(
+        "--backup_dir", help="The directory where the backup will be stored"
+    )
+
     parser = argparse.ArgumentParser(description="Folder cleanser")
     subparsers = parser.add_subparsers(dest="command", help="Sub-command help")
 
-    suffix_parser = subparsers.add_parser("clean_by_suffix")
-    suffix_parser.add_argument("source_dir", help="The directory to clean")
+    suffix_parser = subparsers.add_parser("clean_by_suffix", parents=[parent_parser])
+    suffix_parser.add_argument(
+        "--source_dir", help="The directory to clean", required=True
+    )
     suffix_parser.add_argument(
         "--shallow",
         help="Perform a shallow clean (do not traverse subdirectories)",
         action="store_true",
     )
-    suffix_parser.add_argument(
-        "--backup", action="store_true", help="Create a backup before making changes"
-    )
-    suffix_parser.add_argument(
-        "--backup_dir",
-        help="The directory where the backup will be stored (in the home directory of said user)",
-    )
 
-    date_parser = subparsers.add_parser("clean_by_date")
-    date_parser.add_argument("source_dir", help="The directory to clean")
+    date_parser = subparsers.add_parser("clean_by_date", parents=[parent_parser])
+    date_parser.add_argument(
+        "--source_dir", help="The directory to clean", required=True
+    )
     date_parser.add_argument(
         "--year_only",
         help="Clean directory by year only rather than the default month and year",
@@ -163,27 +169,15 @@ def main():
         help="Perform a shallow clean (do not traverse subdirectories)",
         action="store_true",
     )
-    date_parser.add_argument(
-        "--backup", action="store_true", help="Create a backup before making changes"
-    )
-    date_parser.add_argument(
-        "--backup_dir",
-        help="The directory where the backup will be stored (in the home directory of said user)",
-    )
 
-    size_parser = subparsers.add_parser("clean_by_size")
-    size_parser.add_argument("source_dir", help="The directory to clean")
+    size_parser = subparsers.add_parser("clean_by_size", parents=[parent_parser])
+    size_parser.add_argument(
+        "--source_dir", help="The directory to clean", required=True
+    )
     size_parser.add_argument(
         "--shallow",
         help="Perform a shallow clean (do not traverse subdirectories)",
         action="store_true",
-    )
-    date_parser.add_argument(
-        "--backup", action="store_true", help="Create a backup before making changes"
-    )
-    date_parser.add_argument(
-        "--backup_dir",
-        help="The directory where the backup will be stored (in the home directory of said user)",
     )
     args = parser.parse_args()
 
@@ -191,11 +185,14 @@ def main():
         backup_dir(args.source_dir, args.backup_dir, args.create_backup_dir)
 
     if args.command == "clean_by_suffix":
-        clean_dir_by_suffix(args.source_dir, args.shallow)
+        suffix_dict = clean_dir_by_suffix(args.source_dir, args.shallow)
+        move_files_to_dir(args.source_dir, suffix_dict)
     elif args.command == "clean_by_date":
-        clean_dir_by_date(args.source_dir, args.year_only, args.shallow)
+        date_dict = clean_dir_by_date(args.source_dir, args.year_only, args.shallow)
+        move_files_to_dir(args.source_dir, date_dict)
     elif args.command == "clean_by_size":
-        clean_dir_by_size(args.source_dir, args.shallow)
+        size_dict = clean_dir_by_size(args.source_dir, args.shallow)
+        move_files_to_dir(args.source_dir, size_dict)
     else:
         parser.print_help()
 
