@@ -5,11 +5,13 @@ Folder cleanser is a simple Python script that helps you clean directories effic
 ## Installation
 
 Clone the repository:
-```git clone https://github.com/justinpakzad/FolderCleanser
-
-```bash
-pip install foobar
 ```
+git clone https://github.com/justinpakzad/FolderCleanser
+```
+
+
+
+
 
 ## Usage
 

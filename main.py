@@ -201,12 +201,4 @@ def main():
 
 
 if __name__ == "__main__":
-    # backup_dir("Downloads", "backup_test", create_backup_dir=True)
-    # d = clean_dir_by_suffix("Downloads", shallow=False)
-    # files_dict = clean_dir_by_date("Desktop/books_test1")
-    # move_files_to_dir("Downloads", d)
-    # delete_files_n_days_old('Desktop/')
-    # files_by_size_dict = clean_dir_by_size("Desktop/books_test")
-    # move_files_to_dir("Desktop/books_test1", files_dict)
-    # delete_files_n_days_old("Desktop/books_delete")
     main()
