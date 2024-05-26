@@ -15,6 +15,9 @@ git clone https://github.com/justinpakzad/FolderCleanser
 ## Usage
 
 #### Command Line Options
+- ```clean_by_suffix```: Cleans directory by file suffixes.
+- ```clean_by_date```: Cleans directory by year and month the file was created.
+- ```clean_by_size```: Cleans directory by size of files and bins them into three groups.
 - ```--source_dir```: Source directory to clean.
 - ```--backup```: Flag to backup a directory before cleaning.
 - ```--backup_dir```: The directory where the backup will be stored (in the home directory of said user).
