@@ -37,17 +37,3 @@ file_cats = {
     "ableton": ["als"],
 }
 
-
-def confirmation_prompt_clean():
-    inp = input("Please confirm to cleanse this folder y/n")
-    if str(inp) == "n":
-        return False
-    return True
-
-
-def confirmation_prompt_backup():
-    inp = input("Would you like to create a backup of this directory?")
-    if str(inp) == "n":
-        return False
-    elif str(inp) == "y":
-        return
