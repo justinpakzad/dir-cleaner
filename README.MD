@@ -1,6 +1,6 @@
 # FolderCleanser
 
-Folder cleanser is a simple Python script that helps you clean directories efficiently. We offer a few options such as cleaning  directories by file types, dates, and sizes. We also allow for the option of backing up any directories beforehand, as-well as the option for a deep or shallow cleansing of folders. A shallow cleanse will only apply the cleaning to the top-level directory while our deep cleanse will recursively iterate through all nested directories in that folder and perform the cleaning.
+Folder cleanser is a simple Python script that helps you clean directories efficiently. There is a few options such as cleaning  directories by file types, dates, and sizes. The script also allows for the option to back up any directories beforehand, as-well as the option for a deep or shallow cleansing of folders. A shallow cleanse will only apply the cleaning to the top-level directory while our deep cleanse will recursively iterate through all nested directories in that folder and perform the cleaning.
 
 ## Configuration
 The `categories.py` file serves as the main file for defining which file types the cleaning script recognizes and processes when cleaning by suffix. It comes pre-configured with categories for various file types, including audio, video, images, documents, and more. Feel free to modify the entries in `categories.py` to match the specific file types you frequently handle. Simply add or remove file extensions from the existing categories, or even create new categories as needed.
