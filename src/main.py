@@ -160,10 +160,6 @@ def delete_files_n_days_old(source_dir: str, n_days: int = 10) -> None:
     delete_empty_dirs(source_path)
 
 
-def remove_duplicates(source_dir):
-    pass
-
-
 def confirm_cleaning(directory):
     inp = input(f"Please confirm the cleaning of {directory} (yes/no) ")
     return inp.lower().strip() in ["y", "yes"]
