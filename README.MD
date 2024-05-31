@@ -14,19 +14,19 @@ git clone https://github.com/justinpakzad/DirCleaner
 ```
 
 
-
-
 ## Usage
 
 ### Command Line Options
 - `clean_by_suffix`: Cleans directory based on file suffixes.
 - `clean_by_date`: Cleans directory by organizing files according to the year and month of creation.
 - `clean_by_size`: Cleans directory by the size of files, sorting them into three groups.
+- `deletes_files` : Delete files that are greater than or equal to n days old.
 - `--source_dir`: Specifies the source directory to clean *(required)*.
 - `--backup`: Adds a flag to backup the directory before cleaning *(optional)*.
 - `--backup_dir`: Specifies the directory where the backup will be stored *(optional)*.
 - `--shallow`: Adds a flag to perform a shallow clean that does not traverse subdirectories *(optional)*.
-- `--year_only`: Adds a flag to organize files only by year, applicable only when using `clean_by_date` *(optional)*.
+- `--year_only`: Adds a flag to organize files only by year, applicable only when using `clean_by_date` *(optional)*
+- `--n_days`: The minimum age of files (in days) of files to be deleted, applicable only when using `delete_files`.
 
 
 ### Clean Directory by File Suffix
@@ -46,6 +46,11 @@ python main.py clean_by_date --source_dir <source_directory>
 To clean files in a directory grouped by file size (optional back up available):
 ```bash
 python main.py clean_by_size --source_dir <source_directory>
+```
+### Delete files n days old or more.
+To delete files n days old or more (optional back up available):
+```bash
+python main.py delet_files --source_dir <source_directory> --n_days <number of days old>
 ```
 
 ## Contributing

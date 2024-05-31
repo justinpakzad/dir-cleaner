@@ -140,16 +140,48 @@ def delete_files_n_days_old(source_dir: str, n_days: int = 10) -> None:
     """Delete files that are older than the specified number of days."""
     source_path = get_source_path(Path.home(), source_dir)
     files = source_path.rglob("*")
+    memory_saved = []
     for item in files:
         if item.is_file():
             creation_date = datetime.fromtimestamp(item.stat().st_birthtime)
             time_diff = datetime.now() - creation_date
             if time_diff.days >= n_days:
+                mb = (item.stat().st_size) / 1000000
+                memory_saved.append(mb)
                 item.unlink()
+    if sum(memory_saved) >= 1000:
+        print(
+            f"{len(memory_saved)} files have been deleted and {round(sum(memory_saved) / 1000,2)} GB have been made available."
+        )
+    else:
+        print(
+            f"{len(memory_saved)} files have been deleted and {round(sum(memory_saved),2)} MB have been made available."
+        )
     delete_empty_dirs(source_path)
 
 
-def main():
+def remove_duplicates(source_dir):
+    pass
+
+
+def confirm_cleaning(directory):
+    inp = input(f"Please confirm the cleaning of {directory} (yes/no) ")
+    return inp.lower().strip() in ["y", "yes"]
+
+
+def confirm_backup(directory):
+    inp = input(f"Please confirm the backup of {directory}(yes/no) ")
+    return inp.lower() in ["y", "yes"]
+
+
+def confirm_deletion(directory, n_days):
+    inp = input(
+        f"Please confirm the deletion of files from {directory} that are {n_days} days old or more (yes/no) "
+    )
+    return inp.lower().strip() in ["y", "yes"]
+
+
+def get_args():
     parent_parser = argparse.ArgumentParser(add_help=False)
     parent_parser.add_argument(
         "--backup", action="store_true", help="Create a backup before making changes"
@@ -195,22 +227,44 @@ def main():
         help="Perform a shallow clean (do not traverse subdirectories)",
         action="store_true",
     )
-    args = parser.parse_args()
 
+    delete_files_parser = subparsers.add_parser("delete_files", parents=[parent_parser])
+    delete_files_parser.add_argument(
+        "--source_dir", help="The directory to clean", required=True
+    )
+    delete_files_parser.add_argument(
+        "--n_days",
+        help="The age of the files you want to delete in days (i.e., delete everything more than 10 days old)",
+        required=True,
+    )
+
+    return parser
+
+
+def main():
+    parser = get_args()
+    args = parser.parse_args()
     if args.backup and args.backup_dir:
-        backup_dir(args.source_dir, args.backup_dir, args.create_backup_dir)
+        if confirm_backup(args.source_dir):
+            backup_dir(args.source_dir, args.backup_dir, args.create_backup_dir)
 
     if args.command == "clean_by_suffix":
-        suffix_dict = clean_dir_by_suffix(args.source_dir, args.shallow)
-        move_files_to_dir(args.source_dir, suffix_dict)
+        if confirm_cleaning(args.source_dir):
+            suffix_dict = clean_dir_by_suffix(args.source_dir, args.shallow)
+            move_files_to_dir(args.source_dir, suffix_dict)
     elif args.command == "clean_by_date":
-        date_dict = clean_dir_by_date(args.source_dir, args.year_only, args.shallow)
-        move_files_to_dir(args.source_dir, date_dict)
+        if confirm_cleaning(args.source_dir):
+            date_dict = clean_dir_by_date(args.source_dir, args.year_only, args.shallow)
+            move_files_to_dir(args.source_dir, date_dict)
     elif args.command == "clean_by_size":
-        size_dict = clean_dir_by_size(args.source_dir, args.shallow)
-        move_files_to_dir(args.source_dir, size_dict)
+        if confirm_cleaning(args.source_dir):
+            size_dict = clean_dir_by_size(args.source_dir, args.shallow)
+            move_files_to_dir(args.source_dir, size_dict)
+    elif args.command == "delete_files":
+        if confirm_deletion(args.source_dir, args.n_days):
+            delete_files_n_days_old(args.source_dir, int(args.n_days))
     else:
-        parser.print_help()
+        print("No valid commands were given for more info please check --help")
 
 
 if __name__ == "__main__":
