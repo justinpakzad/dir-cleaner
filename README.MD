@@ -51,25 +51,18 @@ Deletes files that are older than a specified number of days.
 
 ## Examples
 ### Clean Directory by File Suffix
-
-To clean files by their file suffixes, with an optional backup:
-
 ```bash
 python main.py clean_by_suffix --source_dir <source_directory> --backup --backup_dir <backup_directory>
 ```
 ### Clean Directory by Date
-
-To clean files in a directory grouped by month and year (optional back up available):
 ```bash
 python main.py clean_by_date --source_dir <source_directory>
 ```
 ### Clean Directory by File Size
-To clean files in a directory grouped by file size (optional back up available):
 ```bash
 python main.py clean_by_size --source_dir <source_directory>
 ```
-### Delete files n days old or more.
-To delete files n days old or more (optional back up available):
+### Deletes files that are older than a specified number of days.
 ```bash
 python main.py delet_files --source_dir <source_directory> --n_days <number of days old>
 ```
