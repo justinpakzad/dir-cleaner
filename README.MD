@@ -16,19 +16,40 @@ git clone https://github.com/justinpakzad/DirCleaner
 
 ## Usage
 
-### Command Line Options
-- `clean_by_suffix`: Cleans directory based on file suffixes.
-- `clean_by_date`: Cleans directory by organizing files according to the year and month of creation.
-- `clean_by_size`: Cleans directory by the size of files, sorting them into three groups.
-- `deletes_files` : Delete files that are greater than or equal to n days old.
-- `--source_dir`: Specifies the source directory to clean *(required)*.
-- `--backup`: Adds a flag to backup the directory before cleaning *(optional)*.
-- `--backup_dir`: Specifies the directory where the backup will be stored *(optional)*.
-- `--shallow`: Adds a flag to perform a shallow clean that does not traverse subdirectories *(optional)*.
-- `--year_only`: Adds a flag to organize files only by year, applicable only when using `clean_by_date` *(optional)*
-- `--n_days`: The minimum age of files (in days) of files to be deleted, applicable only when using `delete_files`.
+#### 1. `clean_by_suffix`
+Cleans directory based on file suffixes.
+- **Options**:
+  - `--source_dir`: Specifies the source directory to clean *(required)*.
+  - `--backup`: Enables a backup of the directory before cleaning *(optional)*.
+  - `--backup_dir`: Specifies where backups are stored *(optional)*.
+  - `--shallow`: Limits the cleaning to the top-level directory only *(optional)*.
 
+#### 2. `clean_by_date`
+Organizes files in the directory by the year and month of their creation.
+- **Options**:
+  - `--source_dir`: Specifies the source directory to clean *(required)*.
+  - `--year_only`: Organizes files by year only, skipping month categorization *(optional)*.
+  - `--backup`: Enables a backup of the directory before cleaning *(optional)*.
+  - `--backup_dir`: Specifies where backups are stored *(optional)*.
+  - `--shallow`: Limits the cleaning to the top-level directory only *(optional)*.
 
+#### 3. `clean_by_size`
+Sorts and cleans files in the directory based on their size into predefined size groups.
+- **Options**:
+  - `--source_dir`: Specifies the source directory to clean *(required)*.
+  - `--backup`: Enables a backup of the directory before cleaning *(optional)*.
+  - `--backup_dir`: Specifies where backups are stored *(optional)*.
+  - `--shallow`: Limits the cleaning to the top-level directory only *(optional)*.
+
+#### 4. `delete_files`
+Deletes files that are older than a specified number of days.
+- **Options**:
+  - `--source_dir`: Specifies the source directory to clean *(required)*.
+  - `--n_days`: The minimum age (in days) of files to be deleted. Files older than this threshold will be deleted *(required)*.
+  - `--backup`: Enables a backup of the directory before cleaning *(optional)*.
+  - `--backup_dir`: Specifies where backups are stored *(optional)*.
+
+## Examples
 ### Clean Directory by File Suffix
 
 To clean files by their file suffixes, with an optional backup:
