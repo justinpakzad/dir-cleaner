@@ -1,5 +1,5 @@
 file_cats = {
-    "audio": ["mp3", "wav", "raw", "wma", "mid", "midi"],
+    "audio": ["mp3", "wav", "raw", "wma", "mid", "midi", "aif"],
     "video": ["mp4", "mpg", "mpeg", "avi", "mov", "flv", "mkv", "mwv", "m4v", "h264"],
     "images": [
         "png",
@@ -16,7 +16,7 @@ file_cats = {
     ],
     "compressed": ["zip", "z", "7z", "rar", "tar", "gz", "rpm", "pkg", "deb"],
     "installation": ["dmg", "exe", "iso"],
-    "csvs":["csv"],
+    "csvs": ["csv"],
     "docs": [
         "txt",
         "ods",
@@ -30,10 +30,9 @@ file_cats = {
         "log",
     ],
     "pdfs": ["pdf"],
-    "excel_files":["xls","xlsx"],
-    "sql":['sql','sqlite'],
-    "markdown":["md"],
+    "excel_files": ["xls", "xlsx"],
+    "sql": ["sql", "sqlite", "db"],
+    "markdown": ["md"],
     "python": ["py", "ipynb"],
     "ableton": ["als"],
 }
-

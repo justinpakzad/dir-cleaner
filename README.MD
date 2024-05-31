@@ -12,6 +12,10 @@ Clone the repository:
 ```
 git clone https://github.com/justinpakzad/DirCleaner
 ```
+
+
+
+
 ## Usage
 
 ### Command Line Options
@@ -43,6 +47,11 @@ To clean files in a directory grouped by file size (optional back up available):
 ```bash
 python main.py clean_by_size --source_dir <source_directory>
 ```
+
+## Demo
+
+![DirCleaner Demo](demo.gif)
+
 ## Contributing
 
 Any contributions are welcomed. For major changes, please open an issue first to discuss what you would like to change.
