@@ -50,7 +50,7 @@ python main.py clean_by_size --source_dir <source_directory>
 
 ## Demo
 
-![DirCleaner Demo](demo.gif)
+![DirCleaner Demo](dem.gif)
 
 ## Contributing
 
