@@ -66,9 +66,9 @@ python main.py clean_by_date --source_dir <source_directory>
 ```bash
 python main.py clean_by_size --source_dir <source_directory>
 ```
-### Deletes files that are older than a specified number of days.
+### Deletes files that are older than a  specified time frame
 ```bash
-python main.py delet_files --source_dir <source_directory> --n_days <number of days old>
+python main.py delete_files --source_dir <source_directory> --n_days <number of days old>
 ```
 
 ## Contributing
