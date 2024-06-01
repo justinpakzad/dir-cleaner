@@ -58,13 +58,19 @@ def get_source_path(home_path: str, source_dir: str) -> Path:
     return Path(home_path).joinpath(source_dir)
 
 
+def does_dir_exist(source_path):
+    if not source_path.is_dir():
+        print(f"Directory does not exist: {source_path}")
+        return None
+    return True
+
+
 def clean_dir_by_suffix(source_dir: str, shallow: bool = False) -> dict:
     """Organize files by their suffix into respective directories."""
     source_path = get_source_path(Path.home(), source_dir)
     files_by_suffix_dict = defaultdict(list)
-    if not source_path.is_dir():
-        print("Directory does not exist")
-        return files_by_suffix_dict
+    if not does_dir_exist(source_path):
+        return None
 
     files = source_path.glob("*") if shallow else source_path.rglob("*")
     for item in files:
@@ -83,9 +89,7 @@ def clean_dir_by_date(
     """Organize files by their creation date into yearly or monthly directories."""
     source_path = get_source_path(Path.home(), source_dir)
     files_by_date_dict = defaultdict(list)
-    if not source_path.is_dir():
-        print("Directory does not exist")
-        return files_by_date_dict
+    does_dir_exist(source_path)
 
     files = source_path.glob("*") if shallow else source_path.rglob("*")
     for item in files:
@@ -107,9 +111,8 @@ def clean_dir_by_size(source_dir: str, shallow: bool = False) -> dict:
     source_path = get_source_path(Path.home(), source_dir)
     files_by_size_dict = defaultdict(list)
 
-    if not source_path.is_dir():
-        print("Directory does not exist")
-        return files_by_size_dict
+    if not does_dir_exist(source_path):
+        return None
 
     files = source_path.glob("*") if shallow else source_path.rglob("*")
     for item in files:
@@ -141,6 +144,10 @@ def delete_files_by_time(
 ) -> None:
     """Delete files that are older than the specified number of days."""
     source_path = get_source_path(Path.home(), source_dir)
+
+    if not does_dir_exist(source_path):
+        return None
+
     files = source_path.rglob("*")
     memory_saved = []
     for item in files:
