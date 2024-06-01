@@ -14,7 +14,7 @@ git clone https://github.com/justinpakzad/DirCleaner
 ```
 
 
-## Usage
+## Command Line Usage
 
 #### 1. `clean_by_suffix`
 Cleans directory based on file suffixes.
