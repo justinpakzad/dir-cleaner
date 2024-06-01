@@ -45,9 +45,13 @@ Sorts and cleans files in the directory based on their size into predefined size
 Deletes files that are older than a specified number of days.
 - **Options**:
   - `--source_dir`: Specifies the source directory to clean *(required)*.
-  - `--n_days`: The minimum age (in days) of files to be deleted. Files older than this threshold will be deleted *(required)*.
+  - `--n_days`: The minimum age (in days) of files to be deleted. Files older than this threshold will be deleted.
+  - `--n_months`: The minimum age (in months) of files to be deleted.
+  - `--n_years`: The minimum age (in years) of files to be deleted.
   - `--backup`: Enables a backup of the directory before cleaning *(optional)*.
   - `--backup_dir`: Specifies where backups are stored *(optional)*.
+  - **Note**: Only one of `--n_days`, `--n_months`, or `--n_years` can be used for a single command execution. They are mutually exclusive options.
+
 
 ## Examples
 ### Clean Directory by File Suffix

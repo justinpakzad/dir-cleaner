@@ -136,7 +136,9 @@ def move_files_to_dir(source_dir: str, files_dict: dict[list]) -> None:
     delete_empty_dirs(source_path)
 
 
-def delete_files_n_days_old(source_dir: str, n_days: int = 10) -> None:
+def delete_files_by_time(
+    source_dir: str, n_days: int = None, n_months: int = None, n_years: int = None
+) -> None:
     """Delete files that are older than the specified number of days."""
     source_path = get_source_path(Path.home(), source_dir)
     files = source_path.rglob("*")
@@ -145,10 +147,22 @@ def delete_files_n_days_old(source_dir: str, n_days: int = 10) -> None:
         if item.is_file():
             creation_date = datetime.fromtimestamp(item.stat().st_birthtime)
             time_diff = datetime.now() - creation_date
-            if time_diff.days >= n_days:
-                mb = (item.stat().st_size) / 1000000
-                memory_saved.append(mb)
-                item.unlink()
+            mb = (item.stat().st_size) / 1000000
+            if n_days:
+                if time_diff.days >= n_days:
+                    memory_saved.append(mb)
+                    item.unlink()
+            elif n_months:
+                if (time_diff.days / 30) >= n_months:
+                    memory_saved.append(mb)
+                    item.unlink()
+            elif n_years:
+                if (time_diff.days / 365) >= n_years:
+                    memory_saved.append(mb)
+                    item.unlink()
+            else:
+                print("Time period not specified")
+
     if sum(memory_saved) >= 1000:
         print(
             f"{len(memory_saved)} files have been deleted and {round(sum(memory_saved) / 1000,2)} GB have been made available."
@@ -170,10 +184,10 @@ def confirm_backup(directory):
     return inp.lower() in ["y", "yes"]
 
 
-def confirm_deletion(directory, n_days):
-    inp = input(
-        f"Please confirm the deletion of files from {directory} that are {n_days} days old or more (yes/no) "
-    )
+def confirm_deletion(
+    directory,
+):
+    inp = input(f"Please confirm the deletion of files from {directory} (yes/no) ")
     return inp.lower().strip() in ["y", "yes"]
 
 
@@ -203,6 +217,7 @@ def get_args():
     date_parser.add_argument(
         "--source_dir", help="The directory to clean", required=True
     )
+
     date_parser.add_argument(
         "--year_only",
         help="Clean directory by year only rather than the default month and year",
@@ -228,12 +243,24 @@ def get_args():
     delete_files_parser.add_argument(
         "--source_dir", help="The directory to clean", required=True
     )
-    delete_files_parser.add_argument(
-        "--n_days",
-        help="The age of the files you want to delete in days (i.e., delete everything more than 10 days old)",
-        required=True,
+    delete_files_time_group = delete_files_parser.add_mutually_exclusive_group(
+        required=True
     )
-
+    delete_files_time_group.add_argument(
+        "--n_days",
+        type=int,
+        help="The age of the files you want to delete in days (i.e., delete everything more than 10 days old)",
+    )
+    delete_files_time_group.add_argument(
+        "--n_months",
+        type=int,
+        help="The age of the files you want to delete in months",
+    )
+    delete_files_time_group.add_argument(
+        "--n_years",
+        type=int,
+        help="The age of the files you want to delete in years",
+    )
     return parser
 
 
@@ -257,8 +284,16 @@ def main():
             size_dict = clean_dir_by_size(args.source_dir, args.shallow)
             move_files_to_dir(args.source_dir, size_dict)
     elif args.command == "delete_files":
-        if confirm_deletion(args.source_dir, args.n_days):
-            delete_files_n_days_old(args.source_dir, int(args.n_days))
+        if confirm_deletion(args.source_dir):
+            if args.n_days:
+                delete_files_by_time(args.source_dir, n_days=int(args.n_days))
+            elif args.n_months:
+                delete_files_by_time(args.source_dir, n_months=int(args.n_months))
+            elif args.n_years:
+                delete_files_by_time(args.source_dir, n_years=int(args.n_years))
+            else:
+                print("Invalid time period")
+
     else:
         print("No valid commands were given for more info please check --help")
 
