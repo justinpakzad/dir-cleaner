@@ -28,7 +28,7 @@ Cleans directory based on file suffixes.
 
 **Example**:
 ```bash
-python main.py organize --source_dir <source_directory> --method <method_of_cleaning> --backup -b-backup_dir <backup_directory>
+python main.py clean --source_dir <source_directory> --method <method_of_cleaning> --backup -b-backup_dir <backup_directory>
 ```
 
 #### 2. `delete_files`
