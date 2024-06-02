@@ -14,34 +14,24 @@ git clone https://github.com/justinpakzad/DirCleaner
 ```
 
 
-## Command Line Usage
+## Command Line Options
 
-#### 1. `clean_by_suffix`
+#### 1. `clean`
 Cleans directory based on file suffixes.
 - **Options**:
   - `--source_dir`: Specifies the source directory to clean *(required)*.
+  - `--method`: The method of cleaning. Options include suffix,date, and size.
   - `--backup`: Enables a backup of the directory before cleaning *(optional)*.
-  - `--backup_dir`: Specifies where backups are stored *(optional)*.
+  - `--backup_dir`: Specifies where backups are stored. If a backup directory does not exist, one will be created automatically.*(optional)*.
   - `--shallow`: Limits the cleaning to the top-level directory only *(optional)*.
+  - `--year_only`: Organizes files by year only, skipping month categorization *(only applicable for date method)*.
 
-#### 2. `clean_by_date`
-Organizes files in the directory by the year and month of their creation.
-- **Options**:
-  - `--source_dir`: Specifies the source directory to clean *(required)*.
-  - `--year_only`: Organizes files by year only, skipping month categorization *(optional)*.
-  - `--backup`: Enables a backup of the directory before cleaning *(optional)*.
-  - `--backup_dir`: Specifies where backups are stored *(optional)*.
-  - `--shallow`: Limits the cleaning to the top-level directory only *(optional)*.
+**Example**:
+```bash
+python main.py organize --source_dir <source_directory> --method <method_of_cleaning> --backup -b-backup_dir <backup_directory>
+```
 
-#### 3. `clean_by_size`
-Sorts and cleans files in the directory based on their size into predefined size groups.
-- **Options**:
-  - `--source_dir`: Specifies the source directory to clean *(required)*.
-  - `--backup`: Enables a backup of the directory before cleaning *(optional)*.
-  - `--backup_dir`: Specifies where backups are stored *(optional)*.
-  - `--shallow`: Limits the cleaning to the top-level directory only *(optional)*.
-
-#### 4. `delete_files`
+#### 2. `delete_files`
 Deletes files that are older than a specified number of days.
 - **Options**:
   - `--source_dir`: Specifies the source directory to clean *(required)*.
@@ -52,24 +42,11 @@ Deletes files that are older than a specified number of days.
   - `--backup_dir`: Specifies where backups are stored *(optional)*.
   - **Note**: Only one of `--n_days`, `--n_months`, or `--n_years` can be used for a single command execution. They are mutually exclusive options.
 
-
-## Examples
-### Clean Directory by File Suffix
-```bash
-python main.py clean_by_suffix --source_dir <source_directory> --backup --backup_dir <backup_directory>
-```
-### Clean Directory by Date
-```bash
-python main.py clean_by_date --source_dir <source_directory>
-```
-### Clean Directory by File Size
-```bash
-python main.py clean_by_size --source_dir <source_directory>
-```
-### Deletes files that are older than a  specified time frame
+**Example**
 ```bash
 python main.py delete_files --source_dir <source_directory> --n_days <number of days old>
 ```
+
 
 ## Contributing
 
