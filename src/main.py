@@ -8,14 +8,12 @@ from collections import defaultdict
 
 
 def check_empty(source_path: Path) -> bool:
-    """Check if the directory is empty or only contains system files like .DS_Store."""
     return all(item.name == ".DS_Store" for item in source_path.iterdir()) or not any(
         source_path.iterdir()
     )
 
 
 def delete_empty_dirs(source_path: Path) -> None:
-    """Delete all empty subdirectories within the specified path."""
     directories = [d for d in source_path.rglob("*") if d.is_dir()]
     directories.sort(key=lambda x: len(x.parts), reverse=True)
     for item in directories:
@@ -24,25 +22,21 @@ def delete_empty_dirs(source_path: Path) -> None:
 
 
 def get_source_path(home_path: str, source_dir: str) -> Path:
-    """Construct the full path to the source directory under the user's home directory."""
     return Path(home_path).joinpath(source_dir)
 
 
 def verify_directory_exists(source_path: str) -> bool:
-    """Verifies if directory exists"""
     if not source_path.is_dir():
         raise FileNotFoundError("The source directory {source_path} does not exist.")
     return True
 
 
 def compute_file_size_mb(item):
-    """Computes file size in MB"""
     size_mb = (item.stat().st_size) / 1000000
     return size_mb
 
 
 def size_validator(file_size: float) -> str:
-    """Bins files into their respective group based on size"""
     if file_size < 1:
         return "small_files"
     elif file_size >= 1 and file_size < 100:
@@ -74,7 +68,6 @@ def copy_dir_contents(source_dir: str, backup_dir: str) -> None:
 
 
 def backup_dir(source_dir: str, backup_dir: str) -> None:
-    """Back up the entire source directory to the backup directory, with an option to create a backup directory."""
     home_path = Path.home()
     source_path = home_path.joinpath(source_dir)
     backup_path = home_path.joinpath(backup_dir)
@@ -85,7 +78,6 @@ def backup_dir(source_dir: str, backup_dir: str) -> None:
 
 
 def get_files(source_path: str, shallow: bool = False) -> list:
-    """Gets all files with the option of recursive traversal of directory"""
     return source_path.glob("*") if shallow else source_path.rglob("*")
 
 
@@ -95,7 +87,6 @@ def organize_files(
     shallow: bool = False,
     year_only: bool = False,
 ) -> dict:
-    """Organizes files based on users chosen method"""
     source_path = get_source_path(Path.home(), source_dir)
     if not verify_directory_exists(source_path):
         return None
@@ -127,7 +118,6 @@ def organize_files(
 
 
 def move_files_to_dir(source_dir: str, files_dict: dict[list]) -> None:
-    """Move files into directories based on a classification, and remove empty directories afterwards."""
     source_path = get_source_path(Path.home(), source_dir)
     for date, items in files_dict.items():
         for item in items:
@@ -139,7 +129,6 @@ def move_files_to_dir(source_dir: str, files_dict: dict[list]) -> None:
 
 
 def print_memory_saved(memory_list: list) -> None:
-    """Prints the amount of memory saved after deleting files"""
     if not memory_list:
         print("No files were deleted")
     else:
@@ -160,7 +149,6 @@ def time_validator(
     n_months: int = None,
     n_years: int = None,
 ) -> bool:
-    """Validates file age for deletion"""
     now = datetime.now()
     time_diff = now - creation_date
     if n_days:
@@ -179,7 +167,6 @@ def time_validator(
 def delete_files_by_time(
     source_dir: str, n_days: int = None, n_months: int = None, n_years: int = None
 ) -> None:
-    """Delete files that are older than the specified number of days."""
     source_path = get_source_path(Path.home(), source_dir)
 
     if not verify_directory_exists(source_path):
@@ -202,19 +189,16 @@ def delete_files_by_time(
 
 
 def confirm_cleaning(directory: str) -> bool:
-    """Prompts user for confirmation before cleaning"""
     inp = input(f"Please confirm the cleaning of {directory} (yes/no) ")
     return inp.lower().strip() in ["y", "yes"]
 
 
 def confirm_backup(directory: str) -> bool:
-    """Prompts user for confirmation before backup"""
     inp = input(f"Please confirm the backup of {directory}(yes/no) ")
     return inp.lower() in ["y", "yes"]
 
 
 def confirm_deletion(directory: str) -> bool:
-    """Prompts user for confirmation before deletion"""
     inp = input(f"Please confirm the deletion of files from {directory} (yes/no) ")
     return inp.lower().strip() in ["y", "yes"]
 
