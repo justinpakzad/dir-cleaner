@@ -1,4 +1,4 @@
-# DirCleaner
+# Dir-Cleaner
 
 Dir cleaner is a simple Python script that helps you clean directories efficiently. There is a few options such as cleaning  directories by file types, dates, and sizes. The script also allows for the option to back up any directories beforehand, as-well as the option for a deep or shallow cleansing of folders. A shallow cleanse will only apply the cleaning to the top-level directory while our deep cleanse will recursively iterate through all nested directories in that folder and perform the cleaning.
 
